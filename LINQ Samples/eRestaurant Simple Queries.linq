@@ -20,6 +20,26 @@
 	//expanding a table will reveal the table attributes and any relationships
 	
 //step 2 view table (Waiter) data
-	
 	Waiters
-	//
+	
+	//query syntax to also view Waiter data
+	from item in Waiters 
+	select item
+
+	//method syntax to view Waiter data
+	Waiters.Select (item /*input parameter*/ => /*lambda*/ item /*expression*/)
+	
+	//alter the query syntax into a C# statement
+	var results = from item in Waiters 
+					select item;
+	results.Dump();
+	
+	//once the query is created, tested, you will be able to transfer the query with minor modificatons into your BLL methods
+	//public List<pocoObject> SomeBLLMethodName()
+	//{
+		//connect to your DAL object : var contextvariable
+		//do your query
+	//	var results = from item in contextvariable.Waiters 
+	//					select item;
+	//	return results.ToList();
+	}
