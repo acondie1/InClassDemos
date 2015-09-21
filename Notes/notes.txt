@@ -1,4 +1,5 @@
-entity framework - code first, model first
+Entity Framework
+	code first, model first
 	use iCollection when describing the parent
 	use class name when describing the child
 	they are singular - returns an instance of a record
@@ -12,3 +13,26 @@ in eRestaurant:
 
 	use 'protected override void OnModeICreating(DbModelBuilder modelBuilder)'
 
+
+DO IN THIS ORDER!!!
+	-Create Class Library in solution
+	-Create BLL, DAL, Entities folders in class library
+	-Create DTOs, POCOs subfolders in Entities
+	-Make sure you have reference to System.Data.Entity and System.ComponentModel.DataAnnotations in Class 	-Library (Add -> Reference)
+	-Create Class in Entities
+	-In class, before namespace add 
+		#region Additional Namespaces
+		using System.Data.Entity;
+		using System.ComponentModel.DataAnnotations;
+		#endregion
+	- make class public
+	- in class, add
+		[Key]
+		table variables with {get; set;}
+
+		public virtual (ICollection<class>/classname<> {get;set;}
+	- add corresponding class
+
+BLL is where all sercurity is -everyone has to go through the BLL before they can get to DAL
+
+BLL must be public in order for web pages to access it.
