@@ -1,0 +1,14 @@
+entity framework - code first, model first
+	use iCollection when describing the parent
+	use class name when describing the child
+	they are singular - returns an instance of a record
+
+	NotMapped - ids that the property in your entity doesn't have a corresponding column in the database 
+
+DbSet - refers to your entity
+
+in eRestaurant: 
+	Reservations which are linked to tables (many to many relationship)
+
+	use 'protected override void OnModeICreating(DbModelBuilder modelBuilder)'
+
