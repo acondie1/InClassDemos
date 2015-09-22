@@ -36,3 +36,5 @@ DO IN THIS ORDER!!!
 BLL is where all sercurity is -everyone has to go through the BLL before they can get to DAL
 
 BLL must be public in order for web pages to access it.
+
+	- right-click Class library -> Manage Nuget -> Online -> Install 'Entity Framework'

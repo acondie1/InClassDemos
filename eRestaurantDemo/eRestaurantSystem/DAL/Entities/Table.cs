@@ -9,7 +9,7 @@ using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 #endregion
 
-namespace eRestaurantSystem.Entities
+namespace eRestaurantSystem.DAL.Entities
 {
     public class Table
     {
