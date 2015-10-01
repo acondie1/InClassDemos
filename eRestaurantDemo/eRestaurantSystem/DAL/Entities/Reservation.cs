@@ -35,5 +35,6 @@ namespace eRestaurantSystem.DAL.Entities
         //We will not create a ReservationsTable entity in our project but handle it via navigation mapping.
         //Therefore we will place a ICollection<> property in this entity referring to the Tables table.
         public virtual ICollection<Table> Tables { get; set; }
+        public virtual ICollection<Bill> Bills { get; set; }
     }
 }
