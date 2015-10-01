@@ -33,7 +33,7 @@ DO IN THIS ORDER!!!
 		public virtual (ICollection<class>/classname<> {get;set;}
 	- add corresponding class
 
-BLL is where all sercurity is -everyone has to go through the BLL before they can get to DAL
+BLL is where all security is -everyone has to go through the BLL before they can get to DAL
 
 BLL must be public in order for web pages to access it.
 
