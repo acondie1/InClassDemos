@@ -53,6 +53,7 @@
                         <li><a runat="server" href="~/">Home</a></li>
                         <li><a runat="server" href="~/SamplePages/SpecialEventsAdmin">Special Events</a></li>
                         <li><a runat="server" href="~/SamplePages/ListView">Listview Display</a></li>
+                        <li><a runat="server" href="~/SamplePages/ReservationsByDate">Repeater Display</a></li>
                         <li><a runat="server" href="~/About">About</a></li>
                         <li><a runat="server" href="~/Contact">Contact</a></li>
                     </ul>
