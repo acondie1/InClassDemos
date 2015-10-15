@@ -18,7 +18,6 @@ namespace eRestaurantSystem.BLL
     public class AdminController
     {
         #region Query Samples
-
         [DataObjectMethod(DataObjectMethodType.Select, false)]
         public List<SpecialEvent> SpecialEvent_List()
         {
@@ -36,6 +35,33 @@ namespace eRestaurantSystem.BLL
                               orderby item.Description
                               select item;
                 return results.ToList();
+            }
+        }
+
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public List<Waiter> Waiters_List()
+        {
+            using (var context = new eRestaurantContext())
+            {
+                //query syntax 
+                var results = from item in context.Waiters
+                              orderby item.LastName, item.FirstName
+                              select item;
+                return results.ToList();
+            }
+        }
+
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public Waiter GetWaiterByID(int waiterid)
+        {
+            using (var context = new eRestaurantContext())
+            {
+                //query syntax
+                var results = from item in context.Waiters
+                              where item.WaiterID == waiterid
+                              select item;
+                              
+                return results.FirstOrDefault();
             }
         }
 
@@ -155,6 +181,56 @@ namespace eRestaurantSystem.BLL
                 //set up the delete request command
                 context.SpecialEvents.Remove(existing);
                 
+                //commit the action to happen
+                context.SaveChanges();
+            }
+        }
+
+        //Waiter CRUD
+        [DataObjectMethod(DataObjectMethodType.Insert, false)]
+        public void Waiter_Add(Waiter item)
+        {
+            //input into this method is at the instance level
+            using (eRestaurantContext context = new eRestaurantContext())
+            {
+                //create a pointer variable for the instance type.
+                //Set this pointer to null.
+                Waiter added = null;
+
+                //Set up the add request for the dbcontext
+                added = context.Waiters.Add(item);
+
+                //Saving the changes will cause the .Add to execute (delayed execution)
+                //Commits the add to the database
+                //Evaluates the annotations (validation) on your entity
+                context.SaveChanges();
+            }
+        }
+
+        [DataObjectMethod(DataObjectMethodType.Update, false)]
+        public void Waiter_Update(Waiter item)
+        {
+            using (eRestaurantContext context = new eRestaurantContext())
+            {
+                context.Entry<Waiter>(context.Waiters.Attach(item)).State =
+                    System.Data.Entity.EntityState.Modified;
+
+                context.SaveChanges();
+            }
+        }
+
+        [DataObjectMethod(DataObjectMethodType.Delete, false)]
+        public void Waiter_Delete(Waiter item)
+        {
+            using (eRestaurantContext context = new eRestaurantContext())
+            {
+                //lookup the item instance on the database to determine if the instance exists
+                //ensure you reference the PK field name (item.EVENTCODE)
+                Waiter existing = context.Waiters.Find(item.WaiterID);
+
+                //set up the delete request command
+                context.Waiters.Remove(existing);
+
                 //commit the action to happen
                 context.SaveChanges();
             }
