@@ -51,4 +51,52 @@ public partial class CommandPages_WaiterAdmin : System.Web.UI.Page
         }
 
     }
+    protected void InsertWaiter_Click(object sender, EventArgs e)
+    {
+        //this example is using the TryRun inline
+        MessageUserControl1.TryRun(() =>
+            {
+                Waiter item = new Waiter();
+                item.FirstName = FirstName.Text;
+                item.LastName = LastName.Text;
+                item.Address = Address.Text;
+                item.Phone = Phone.Text;
+                item.HireDate = DateTime.Parse(DateHired.Text);
+                item.ReleaseDate = null;
+                AdminController sysmgr = new AdminController();
+                WaiterID.Text = sysmgr.Waiter_Add(item).ToString();
+                MessageUserControl1.ShowInfo("Waiter Added.");
+            });
+    }
+    protected void UpdateWaiter_Click(object sender, EventArgs e)
+    {
+        if (string.IsNullOrEmpty(WaiterID.Text))
+        {
+            MessageUserControl1.ShowInfo("Please select a waiter to update");
+        }
+        else
+        {
+            MessageUserControl1.TryRun(() =>
+            {
+                Waiter item = new Waiter();
+                item.WaiterID = int.Parse(WaiterID.Text);
+                item.FirstName = FirstName.Text;
+                item.LastName = LastName.Text;
+                item.Address = Address.Text;
+                item.Phone = Phone.Text;
+                item.HireDate = DateTime.Parse(DateHired.Text);
+                if(string.IsNullOrEmpty(DateReleased.Text))
+                {
+                    item.ReleaseDate = null;
+                }
+                else
+                {
+                    item.ReleaseDate = DateTime.Parse(DateReleased.Text);
+                }                
+                AdminController sysmgr = new AdminController();
+                sysmgr.Waiter_Update(item);
+                MessageUserControl1.ShowInfo("Waiter Updated.");
+            });
+        }
+    }
 }

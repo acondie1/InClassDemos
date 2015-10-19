@@ -188,7 +188,7 @@ namespace eRestaurantSystem.BLL
 
         //Waiter CRUD
         [DataObjectMethod(DataObjectMethodType.Insert, false)]
-        public void Waiter_Add(Waiter item)
+        public int Waiter_Add(Waiter item)
         {
             //input into this method is at the instance level
             using (eRestaurantContext context = new eRestaurantContext())
@@ -204,6 +204,8 @@ namespace eRestaurantSystem.BLL
                 //Commits the add to the database
                 //Evaluates the annotations (validation) on your entity
                 context.SaveChanges();
+                //added contains the data of the newly added waiter including the PK value
+                return added.WaiterID;
             }
         }
 
