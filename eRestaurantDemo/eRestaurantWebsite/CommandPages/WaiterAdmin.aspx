@@ -8,8 +8,7 @@
     <br />
     <uc1:MessageUserControl ID="MessageUserControl1" runat="server" />
     <asp:Label ID="Label1" runat="server" Text="Select Waiter for Update"></asp:Label>
-    <asp:DropDownList ID="WaiterList" runat="server" AppendDataBoundItems="True" DataSourceID="ODSWaiters" DataTextField="FullName" DataValueField="WaiterID" Height="16px" Width="249px">
-        <asp:ListItem Value="0">Select Waiter</asp:ListItem>
+    <asp:DropDownList ID="WaiterList" runat="server" DataSourceID="ODSWaiters" DataTextField="FullName" DataValueField="WaiterID" Height="16px" Width="249px">        
     </asp:DropDownList>
     <asp:LinkButton ID="FetchWaiter" runat="server" OnClick="FetchWaiter_Click">Fetch Waiter</asp:LinkButton>
     <asp:ObjectDataSource ID="ODSWaiters" runat="server" OldValuesParameterFormatString="original_{0}" SelectMethod="Waiters_List" TypeName="eRestaurantSystem.BLL.AdminController"></asp:ObjectDataSource>

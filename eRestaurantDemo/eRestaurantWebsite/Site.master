@@ -57,6 +57,7 @@
                         <li><a runat="server" href="~/SamplePages/CetegoryMenuItems">Repeater2 Display</a></li>
                         <li><a runat="server" href="~/CommandPages/SpecialEventsAdmin">Special Events CRUD</a></li>
                         <li><a runat="server" href="~/CommandPages/WaiterAdmin">Waiter CRUD</a></li>
+                        <li><a runat="server" href="~/Reports/MenuCategoryItemReport">Reporting</a></li>
                         <li><a runat="server" href="~/About">About</a></li>
                         <li><a runat="server" href="~/Contact">Contact</a></li>
                     </ul>
