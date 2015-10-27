@@ -938,6 +938,7 @@
                           <PaddingBottom>2pt</PaddingBottom>
                         </Style>
                       </Textbox>
+                      <rd:Selected>true</rd:Selected>
                     </CellContents>
                   </TablixHeader>
                   <TablixMembers>
@@ -968,7 +969,7 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Total</Value>
+                                <Value />
                                 <Style>
                                   <FontFamily>Tahoma</FontFamily>
                                   <FontWeight>Bold</FontWeight>
@@ -1082,7 +1083,7 @@
         <DataSetName>DataSet1</DataSetName>
         <Top>0.30208in</Top>
         <Height>1.25in</Height>
-        <Width>7.66667in</Width>
+        <Width>7.66666in</Width>
         <Style>
           <Border>
             <Style>None</Style>
