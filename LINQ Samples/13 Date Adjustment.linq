@@ -66,3 +66,35 @@ var step2 = from data in step1.ToList() // .ToList() forces the first result set
                                 }
             };
 step2.Dump();
+
+//step 3
+var step3 = from data in step2.ToList()
+			select new
+			{
+				Table = data.Table,
+				Seating = data.Seating,
+				Taken = data.CommonBilling.Count() > 0,
+				CommonBilling = data.CommonBilling.FirstOrDefault()
+			};
+step3.Dump();
+
+//step 4 - Build our intended seating summary info
+var step4 = from data in step3
+			select new
+			{
+				Table = data.Table,
+				Seating = data.Seating,
+				Taken = data.Taken,
+				//use a ternary expression to conditionally get the bill id
+				BillID = data.Taken ?			//if (data.Taken)
+						data.CommonBilling.BillID	//value to use if true
+						: (int?) null,				//value to use if fales
+				BillTotal = data.Taken ?
+							data.CommonBilling.BillTotal : (decimal?) null,
+				Waiter = data.Taken ? data.CommonBilling.Waiter : (string) null,
+				ReservationName = data.Taken ? 
+								(data.CommonBilling.Reservation != null ?
+								data.CommonBilling.Reservation.CustomerName : (string) null)
+								: (string) null
+			};
+step4.Dump();

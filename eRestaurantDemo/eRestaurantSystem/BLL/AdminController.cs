@@ -9,7 +9,8 @@ using eRestaurantSystem.DAL.Entities;
 using eRestaurantSystem.DAL;
 using System.ComponentModel;        //used for ODS access
 using eRestaurantSystem.DAL.DTOs;
-using eRestaurantSystem.DAL.POCOs; 
+using eRestaurantSystem.DAL.POCOs;
+using System.Data.Entity;
 #endregion
 
 namespace eRestaurantSystem.BLL
@@ -281,6 +282,100 @@ namespace eRestaurantSystem.BLL
                 context.SaveChanges();
             }
         }
+
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public List<SeatingSummary> SeatingByDateTime(DateTime date, TimeSpan time)
+        {
+            using (eRestaurantContext context = new eRestaurantContext())
+            {
+                //place your query(ies) here
+                // Step 1 - Get the table info along with any walk-in bills and reservation bills for the specific time slot
+                var step1 = from data in context.Tables
+                            select new
+                            {
+                                Table = data.TableNumber,
+                                Seating = data.Capacity,
+                                // This sub-query gets the bills for walk-in customers
+                                WalkIns = from walkIn in data.Bills
+                                          where
+                                              walkIn.BillDate.Year == date.Year
+                                              && walkIn.BillDate.Month == date.Month
+                                              && walkIn.BillDate.Day == date.Day
+                                              //&& walkIn.BillDate.TimeOfDay <= time
+                                              && DbFunctions.CreateTime(walkIn.BillDate.Hour,
+                                                                        walkIn.BillDate.Minute,
+                                                                        walkIn.BillDate.Second) <= time
+                                              && (!walkIn.OrderPaid.HasValue || walkIn.OrderPaid.Value >= time)
+                                          //                          && (!walkIn.PaidStatus || walkIn.OrderPaid >= time)
+                                          select walkIn,
+                                // This sub-query gets the bills for reservations
+                                Reservations = from booking in data.Reservations
+                                               from reservationParty in booking.Bills
+                                               where
+                                                   reservationParty.BillDate.Year == date.Year
+                                                   && reservationParty.BillDate.Month == date.Month
+                                                   && reservationParty.BillDate.Day == date.Day
+                                                   //&& reservationParty.BillDate.TimeOfDay <= time
+                                                   && DbFunctions.CreateTime(reservationParty.BillDate.Hour,
+                                                                        reservationParty.BillDate.Minute,
+                                                                        reservationParty.BillDate.Second) <= time
+                                                   && (!reservationParty.OrderPaid.HasValue || reservationParty.OrderPaid.Value >= time)
+                                               //                          && (!reservationParty.PaidStatus || reservationParty.OrderPaid >= time)
+                                               select reservationParty
+                            };
+
+                // Step 2 - Union the walk-in bills and the reservation bills while extracting the relevant bill info
+                // .ToList() helps resolve the "Types in Union or Concat are constructed incompatibly" error
+                var step2 = from data in step1.ToList() // .ToList() forces the first result set to be in memory
+                            select new
+                            {
+                                Table = data.Table,
+                                Seating = data.Seating,
+                                CommonBilling = from info in data.WalkIns.Union(data.Reservations)
+                                                select new // info
+                                                {
+                                                    BillID = info.BillID,
+                                                    BillTotal = info.Items.Sum(bi => bi.Quantity * bi.SalePrice),
+                                                    Waiter = info.Waiter.FirstName,
+                                                    Reservation = info.Reservation
+                                                }
+                            };
+                //step2.Dump();
+
+                //step 3
+                var step3 = from data in step2.ToList()
+                            select new
+                            {
+                                Table = data.Table,
+                                Seating = data.Seating,
+                                Taken = data.CommonBilling.Count() > 0,
+                                CommonBilling = data.CommonBilling.FirstOrDefault()
+                            };
+                //step3.Dump();
+
+                //step 4 - Build our intended seating summary info
+                var step4 = from data in step3
+                            select new SeatingSummary()
+                            {
+                                Table = data.Table,
+                                Seating = data.Seating,
+                                Taken = data.Taken,
+                                //use a ternary expression to conditionally get the bill id
+                                BillID = data.Taken ?			//if (data.Taken)
+                                        data.CommonBilling.BillID	//value to use if true
+                                        : (int?)null,				//value to use if fales
+                                BillTotal = data.Taken ?
+                                            data.CommonBilling.BillTotal : (decimal?)null,
+                                Waiter = data.Taken ? data.CommonBilling.Waiter : (string)null,
+                                ReservationName = data.Taken ?
+                                                (data.CommonBilling.Reservation != null ?
+                                                data.CommonBilling.Reservation.CustomerName : (string)null)
+                                                : (string)null
+                            };
+                //step4.Dump();
+                return step4.ToList();
+            }
+        }
         #endregion
 
         #region Front Desk
@@ -333,6 +428,26 @@ namespace eRestaurantSystem.BLL
                                         Reservations = itemGroup.ToList()
                                     };
                 return finalResult.OrderBy(x => x.Hour).ToList();
+            }
+        }
+
+        /// <summary>
+        /// ListWaiters returns the id and full name of all the current waiters
+        /// </summary>
+        /// <returns></returns>
+        [DataObjectMethod(DataObjectMethodType.Select, false)]
+        public List<WaiterOnDuty> ListWaiters()
+        {
+            using (var context = new eRestaurantContext())
+            {
+                var result = from person in context.Waiters
+                             where person.ReleaseDate == null
+                             select new WaiterOnDuty()
+                             {
+                                 WaiterId = person.WaiterID,
+                                 FullName = person.FirstName + " " + person.LastName
+                             };
+                return result.ToList();
             }
         }
         #endregion
