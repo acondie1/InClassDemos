@@ -3,11 +3,13 @@
 <%@ Register src="../UserControls/MessageUserControl.ascx" tagname="MessageUserControl" tagprefix="uc1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" Runat="Server">
-    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <br /><br />
     <h1>Waiter Admin</h1>
     
     <br />
     <uc1:MessageUserControl ID="MessageUserControl1" runat="server" />
+    <br /><br />
+    Curregntly Logged in userName: <asp:Label ID="CurrentUserName" runat="server"></asp:Label>
     <asp:Label ID="Label1" runat="server" Text="Select Waiter for Update"></asp:Label>
     <asp:DropDownList ID="WaiterList" runat="server" DataSourceID="ODSWaiters" DataTextField="FullName" DataValueField="WaiterID" Height="16px" Width="249px">        
     </asp:DropDownList>

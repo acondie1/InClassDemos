@@ -13,7 +13,7 @@ using eRestaurantSystem.DAL.Entities.Security;
 
 namespace eRestaurantSystem.BLL.Security
 {
-    class RoleManager : RoleManager<IdentityRole>
+    public class RoleManager : RoleManager<IdentityRole>
     {
         public RoleManager() : base (new RoleStore<IdentityRole>(new ApplicationDbContext()))
         {

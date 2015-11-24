@@ -28,6 +28,9 @@ namespace eRestaurantSystem.BLL.Security
         public UserManager()
             : base(new UserStore<ApplicationUser>(new ApplicationDbContext()))
         {
+        }
+        public void AddDefaultUsers()
+        {
             using (var context = new eRestaurantContext())
             {
                 var employees = from data in context.Waiters
