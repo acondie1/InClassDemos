@@ -5,6 +5,11 @@ using System.Web;
 using System.Web.UI;
 using eRestaurantWebsite;
 
+#region Additional Namespaces
+using eRestaurantSystem.BLL.Security;
+using eRestaurantSystem.DAL.Entities.Security;
+#endregion
+
 public partial class Account_Login : Page
 {
         protected void Page_Load(object sender, EventArgs e)

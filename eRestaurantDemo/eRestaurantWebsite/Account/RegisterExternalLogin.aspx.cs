@@ -4,6 +4,11 @@ using System;
 using System.Web;
 using eRestaurantWebsite;
 
+#region Additional Namespaces
+using eRestaurantSystem.BLL.Security;
+using eRestaurantSystem.DAL.Entities.Security;
+#endregion
+
 public partial class Account_RegisterExternalLogin : System.Web.UI.Page
 {
     protected string ProviderName
